@@ -11,8 +11,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     fullName: '',
     email: '',
     company: '',
-    projectType: 'Web Experience',
+    projectType: 'Portfolio Website',
     budget: "Let's Discuss",
+    timeline: 'Flexible',
     details: '',
   })
 
@@ -31,8 +32,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
       fullName: '',
       email: '',
       company: '',
-      projectType: 'Web Experience',
+      projectType: 'Portfolio Website',
       budget: "Let's Discuss",
+      timeline: 'Flexible',
       details: '',
     })
     onClose()
@@ -85,7 +87,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           /* Form Content */
           <>
             {/* Header & Subtitle */}
-            <div className="space-y-2 text-left">
+            <div className="space-y-2 text-left border-b border-neutral-900 pb-6">
               <span className="text-[10px] font-technical tracking-[0.35em] uppercase text-[#990000] font-semibold block">
                 GET IN TOUCH
               </span>
@@ -99,9 +101,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Row 1: Full Name & Email Address */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Full Name */}
-                <div className="space-y-2">
+                <div className="space-y-2 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Full Name <span className="text-[#990000]">*</span>
                   </label>
@@ -115,8 +117,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   />
                 </div>
 
-                {/* Email Address */}
-                <div className="space-y-2">
+                <div className="space-y-2 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Email Address <span className="text-[#990000]">*</span>
                   </label>
@@ -131,9 +132,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {/* Company / Organization */}
-                <div className="space-y-2 sm:col-span-1">
+              {/* Row 2: Company & Project Type */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Company <span className="text-neutral-500">(Optional)</span>
                   </label>
@@ -146,8 +147,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   />
                 </div>
 
-                {/* Project Type Dropdown */}
-                <div className="space-y-2 sm:col-span-1">
+                <div className="space-y-2 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Project Type <span className="text-[#990000]">*</span>
                   </label>
@@ -157,36 +157,58 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                     onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-800 text-white text-xs font-technical focus:outline-none focus:border-neutral-500 transition-all cursor-pointer"
                   >
-                    <option value="Web Experience">Web Experience</option>
-                    <option value="Full Stack Application">Full Stack Application</option>
+                    <option value="Portfolio Website">Portfolio Website</option>
+                    <option value="Business Website">Business Website</option>
+                    <option value="E-Commerce">E-Commerce</option>
+                    <option value="SaaS Dashboard">SaaS Dashboard</option>
+                    <option value="Landing Page">Landing Page</option>
+                    <option value="Web Application">Web Application</option>
                     <option value="AI Integration">AI Integration</option>
-                    <option value="UI / UX Design">UI / UX Design</option>
-                    <option value="Security Consulting">Security Consulting</option>
+                    <option value="UI/UX Design">UI/UX Design</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
+              </div>
 
-                {/* Project Budget Dropdown */}
-                <div className="space-y-2 sm:col-span-1">
+              {/* Row 3: Estimated Budget & Project Timeline */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
-                    Budget <span className="text-neutral-500">(Optional)</span>
+                    Estimated Budget <span className="text-neutral-500">(Optional)</span>
                   </label>
                   <select
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-800 text-white text-xs font-technical focus:outline-none focus:border-neutral-500 transition-all cursor-pointer"
                   >
-                    <option value="Under $1,000">Under $1,000</option>
-                    <option value="$1,000–$5,000">$1,000–$5,000</option>
-                    <option value="$5,000–$10,000">$5,000–$10,000</option>
-                    <option value="$10,000+">$10,000+</option>
                     <option value="Let's Discuss">Let's Discuss</option>
+                    <option value="Under $500">Under $500</option>
+                    <option value="$500 – $1,500">$500 – $1,500</option>
+                    <option value="$1,500 – $5,000">$1,500 – $5,000</option>
+                    <option value="$5,000+">$5,000+</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2 text-left">
+                  <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
+                    Project Timeline <span className="text-neutral-500">(Optional)</span>
+                  </label>
+                  <select
+                    value={formData.timeline}
+                    onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-800 text-white text-xs font-technical focus:outline-none focus:border-neutral-500 transition-all cursor-pointer"
+                  >
+                    <option value="ASAP">ASAP</option>
+                    <option value="1–2 Weeks">1–2 Weeks</option>
+                    <option value="1 Month">1 Month</option>
+                    <option value="2–3 Months">2–3 Months</option>
+                    <option value="Flexible">Flexible</option>
                   </select>
                 </div>
               </div>
 
               {/* Project Details Textarea */}
-              <div className="space-y-2">
+              <div className="space-y-2 text-left">
                 <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                   Project Details <span className="text-[#990000]">*</span>
                 </label>
@@ -201,7 +223,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-between pt-2 gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between pt-2 gap-4 border-t border-neutral-900">
                 <button
                   type="submit"
                   className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-black font-thunder uppercase text-xl tracking-wider font-normal hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 shadow-md"
@@ -219,7 +241,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
 
               {/* Premium Footer Note */}
-              <p className="text-[10px] font-technical text-neutral-500 uppercase tracking-widest text-center pt-2 border-t border-neutral-900">
+              <p className="text-[10px] font-technical text-neutral-500 uppercase tracking-widest text-center pt-2">
                 I'll personally review your inquiry and respond as soon as possible.
               </p>
             </form>
