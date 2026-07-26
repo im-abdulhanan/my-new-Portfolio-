@@ -227,7 +227,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 text-xs font-technical uppercase tracking-widest text-neutral-400">
-            <a href="mailto:imhanan.mail@gmail.com" className="hover:text-white transition-colors">
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=imhanan.mail@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
               imhanan.mail@gmail.com
             </a>
             <span className="text-neutral-700 hidden sm:inline">•</span>

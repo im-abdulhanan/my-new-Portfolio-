@@ -39,11 +39,24 @@ export function App() {
       <footer className="w-full bg-[#030303] border-t border-neutral-900 py-8 px-6 sm:px-12 flex flex-col sm:flex-row items-center justify-between text-[11px] font-technical uppercase tracking-widest text-neutral-500 gap-4">
         <div>© 2026 ABDUL HANAN. ALL RIGHTS RESERVED.</div>
         <div className="flex flex-wrap items-center justify-center gap-6">
-          <a href="https://x.com/abhanan_dev" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">TWITTER / X</a>
-          <a href="https://github.com/im-abdulhanan" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GITHUB</a>
-          <a href="https://www.linkedin.com/in/ihanan" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LINKEDIN</a>
-          <a href="mailto:imhanan.mail@gmail.com" className="hover:text-white transition-colors">imhanan.mail@gmail.com</a>
-          <a href="tel:+923180522085" className="hover:text-white transition-colors">+92 318 0522085</a>
+          {[
+            { label: 'TWITTER / X', href: 'https://x.com/abhanan_dev' },
+            { label: 'GITHUB', href: 'https://github.com/im-abdulhanan' },
+            { label: 'LINKEDIN', href: 'https://www.linkedin.com/in/ihanan' },
+          ].map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center space-x-1.5 hover:text-white transition-colors duration-300"
+            >
+              <span>{item.label}</span>
+              <span className="inline-block transform transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 text-neutral-400 group-hover:text-white">
+                ↗
+              </span>
+            </a>
+          ))}
         </div>
       </footer>
     </div>
