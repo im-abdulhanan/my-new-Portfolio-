@@ -29,6 +29,11 @@ const TECH_LOGOS: LogoItem[] = [
   { id: 'win', name: 'Windows', src: '/sequences/Teach Stack/win.png', width: 56, height: 56 },
   { id: 'microsoft', name: 'Microsoft', src: '/sequences/Teach Stack/microsoft.png', width: 56, height: 56 },
   { id: 'npm', name: 'npm', src: '/sequences/Teach Stack/npm.png', width: 64, height: 64 },
+  { id: 'frame2', name: 'Frame 2', src: '/sequences/Teach Stack/Frame 2.png', width: 60, height: 60 },
+  { id: 'frame5', name: 'Frame 5', src: '/sequences/Teach Stack/Frame 5.png', width: 60, height: 60 },
+  { id: 'frame21', name: 'Frame 21', src: '/sequences/Teach Stack/Frame 21.png', width: 60, height: 60 },
+  { id: 'frame24', name: 'Frame 24', src: '/sequences/Teach Stack/Frame 24.png', width: 60, height: 60 },
+  { id: 'vector', name: 'Vector', src: '/sequences/Teach Stack/Vector.png', width: 60, height: 60 },
 ]
 
 export const TechPhysicsPlayground: React.FC = () => {
