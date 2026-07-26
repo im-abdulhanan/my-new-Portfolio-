@@ -60,7 +60,7 @@ export const TechPhysicsPlayground: React.FC = () => {
     // Create Matter Engine
     const engine = Engine.create({
       enableSleeping: true,
-      gravity: { x: 0, y: 0.9, scale: 0.001 },
+      gravity: { x: 0, y: 1.2, scale: 0.001 },
     })
 
     const world = engine.world
@@ -89,7 +89,7 @@ export const TechPhysicsPlayground: React.FC = () => {
     const ctx = canvas.getContext('2d')
 
     // Create Static Boundaries (Floor, Left Wall, Right Wall)
-    const wallOptions = { isStatic: true, friction: 0.3, restitution: 0.2 }
+    const wallOptions = { isStatic: true, friction: 0.8, frictionStatic: 1.0, restitution: 0.1 }
     const wallThickness = 100
 
     let ground = Bodies.rectangle(
@@ -220,32 +220,33 @@ export const TechPhysicsPlayground: React.FC = () => {
 
       TECH_LOGOS.forEach((logo, index) => {
         setTimeout(() => {
-          // Random horizontal spawn position
-          const minX = 80
-          const maxX = bounds.width - 80
-          const spawnX = minX + Math.random() * (maxX - minX)
-          const spawnY = -60 - Math.random() * 40
+          // Center-focused spawn distribution for natural pile stacking
+          const center = bounds.width / 2
+          const spread = Math.min(bounds.width * 0.7, 550)
+          const spawnX = center - spread / 2 + Math.random() * spread
+          const spawnY = -50 - Math.random() * 50
 
-          const radius = (Math.max(logo.width, logo.height) * 1.15) / 2
+          const radius = (Math.max(logo.width, logo.height) * 1.12) / 2
 
           const body = Bodies.circle(spawnX, spawnY, radius, {
-            friction: 0.15,
-            frictionAir: 0.018,
-            restitution: 0.25, // Low bounce, heavy satisfying physical feel
-            density: 0.002,
+            friction: 0.55,         // High friction allows stable stacking without sliding
+            frictionStatic: 0.85,   // Prevents stacked items from slipping
+            frictionAir: 0.015,     // Natural gravity drop speed
+            restitution: 0.15,      // Low bounce so logos settle cleanly into piles
+            density: 0.003,         // Heavy physical mass
           })
 
           ;(body as any).logoData = logo
 
           // Initial subtle velocity & torque for cinematic drop
           Body.setVelocity(body, {
-            x: (Math.random() - 0.5) * 2,
-            y: Math.random() * 2 + 1,
+            x: (Math.random() - 0.5) * 1.5,
+            y: Math.random() * 2 + 1.5,
           })
-          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.08)
+          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06)
 
           Composite.add(world, body)
-        }, index * 100) // 100ms staggered reveal delay
+        }, index * 90) // 90ms staggered reveal stream
       })
     }
 
