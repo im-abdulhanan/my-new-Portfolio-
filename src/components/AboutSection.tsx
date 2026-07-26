@@ -1,6 +1,7 @@
 import React from 'react'
 import { EditorialWordReveal } from './EditorialWordReveal'
 import { TechPhysicsPlayground } from './TechPhysicsPlayground'
+import { StackedProjectsShowcase } from './StackedProjectsShowcase'
 
 interface AboutSectionProps {
   onOpenContactModal?: () => void
@@ -128,82 +129,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
           <TechPhysicsPlayground />
         </div>
 
-        {/* Selected Works Preview Section */}
-        <div id="works-section" className="space-y-12">
-          <div className="text-center space-y-3 max-w-4xl mx-auto border-b border-neutral-900 pb-8">
-            <span className="text-[11px] font-technical tracking-[0.35em] uppercase text-neutral-400 block text-center mx-auto">
-              05 // SELECTED SHOWCASE
-            </span>
-            <h3 className="font-thunder text-4xl sm:text-6xl md:text-7xl text-white uppercase tracking-tighter font-normal">
-              CRAFTED <span className="text-[#990000]">EXPERIENCES</span>
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                title: 'NEXUS CYBERNETICS // DRACO WATCH',
-                category: '3D Sequence / Product Reveal',
-                year: '2026',
-                desc: 'Full viewport canvas animation with real-time shader feedback.',
-                image: '/sequences/Projects Pics/Dracu-watch.PNG',
-                link: 'https://draco-lux-watch.vercel.app/',
-              },
-              {
-                title: 'SPECTRA TRAVEL EXPERIENCE',
-                category: 'Interactive WebGL Experience',
-                year: '2025',
-                desc: 'Cinematic travel interface with dynamic physics choreography.',
-                image: '/sequences/Projects Pics/Travel.PNG',
-                link: 'https://travel-agency-snowy-eight.vercel.app/',
-              },
-            ].map((project, idx) => (
-              <a
-                key={idx}
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-3xl bg-neutral-950 border border-neutral-800/80 p-6 sm:p-8 space-y-6 flex flex-col justify-between hover:border-neutral-600 transition-all duration-700 shadow-xl cursor-pointer"
-              >
-                {/* Project Screenshot Banner */}
-                <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800/60">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent"></div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center text-xs font-technical text-neutral-400">
-                    <span className="uppercase tracking-widest">{project.category}</span>
-                    <span>{project.year}</span>
-                  </div>
-
-                  <h4 className="font-thunder text-2xl sm:text-3xl text-white uppercase tracking-wider font-normal group-hover:text-neutral-200 transition-colors">
-                    {project.title}
-                  </h4>
-                  <p className="text-xs font-technical text-neutral-400 leading-relaxed tracking-wide">
-                    {project.desc}
-                  </p>
-                </div>
-
-                <div className="flex items-center space-x-2 text-xs font-technical uppercase tracking-widest text-white group-hover:text-neutral-300 pt-2 border-t border-neutral-900">
-                  <span>Explore Case Study</span>
-                  <svg
-                    className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform duration-300"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
+        {/* Stacked Viewport Projects Showcase (Awwwards 100vh overlapping card stack) */}
+        <StackedProjectsShowcase />
 
         {/* Contact Call to Action */}
         <div id="contact-section" className="text-center py-20 border-t border-neutral-900 space-y-8">
