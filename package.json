@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.2",
     "@tailwindcss/vite": "^4.0.0",
     "@types/matter-js": "^0.20.2",
     "@vercel/analytics": "^2.0.1",
