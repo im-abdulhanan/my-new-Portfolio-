@@ -60,7 +60,7 @@ export const TechPhysicsPlayground: React.FC = () => {
     // Create Matter Engine
     const engine = Engine.create({
       enableSleeping: true,
-      gravity: { x: 0, y: 1.2, scale: 0.001 },
+      gravity: { x: 0, y: 0.95, scale: 0.001 },
     })
 
     const world = engine.world
@@ -89,7 +89,7 @@ export const TechPhysicsPlayground: React.FC = () => {
     const ctx = canvas.getContext('2d')
 
     // Create Static Boundaries (Floor, Left Wall, Right Wall)
-    const wallOptions = { isStatic: true, friction: 0.8, frictionStatic: 1.0, restitution: 0.1 }
+    const wallOptions = { isStatic: true, friction: 0.4, frictionStatic: 0.5, restitution: 0.2 }
     const wallThickness = 100
 
     let ground = Bodies.rectangle(
@@ -220,33 +220,34 @@ export const TechPhysicsPlayground: React.FC = () => {
 
       TECH_LOGOS.forEach((logo, index) => {
         setTimeout(() => {
-          // Center-focused spawn distribution for natural pile stacking
-          const center = bounds.width / 2
-          const spread = Math.min(bounds.width * 0.7, 550)
-          const spawnX = center - spread / 2 + Math.random() * spread
-          const spawnY = -50 - Math.random() * 50
+          // Spawn each logo at a randomized X position across the full container width
+          const padding = 65
+          const minX = padding
+          const maxX = bounds.width - padding
+          const spawnX = minX + Math.random() * (maxX - minX)
+          const spawnY = -60 - Math.random() * 50
 
-          const radius = (Math.max(logo.width, logo.height) * 1.12) / 2
+          const radius = (Math.max(logo.width, logo.height) * 1.1) / 2
 
           const body = Bodies.circle(spawnX, spawnY, radius, {
-            friction: 0.55,         // High friction allows stable stacking without sliding
-            frictionStatic: 0.85,   // Prevents stacked items from slipping
-            frictionAir: 0.015,     // Natural gravity drop speed
-            restitution: 0.15,      // Low bounce so logos settle cleanly into piles
-            density: 0.003,         // Heavy physical mass
+            friction: 0.3,          // Moderate friction prevents tall towers and encourages spreading
+            frictionStatic: 0.45,   // Allows balanced resting piles across the floor
+            frictionAir: 0.02,      // Moderate air friction for smooth low-gravity descent
+            restitution: 0.2,       // Low bounce for clean, realistic settling
+            density: 0.0025,
           })
 
           ;(body as any).logoData = logo
 
-          // Initial subtle velocity & torque for cinematic drop
+          // Apply small random horizontal velocity + slight random initial rotation
           Body.setVelocity(body, {
-            x: (Math.random() - 0.5) * 1.5,
-            y: Math.random() * 2 + 1.5,
+            x: (Math.random() - 0.5) * 3.2,
+            y: Math.random() * 1.5 + 1.2,
           })
-          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06)
+          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.1)
 
           Composite.add(world, body)
-        }, index * 90) // 90ms staggered reveal stream
+        }, index * 100) // Staggered drop by 100ms
       })
     }
 
