@@ -1,5 +1,6 @@
 import React from 'react'
 import { EditorialWordReveal } from './EditorialWordReveal'
+import { CapabilitiesMarquee } from './CapabilitiesMarquee'
 import { TechPhysicsPlayground } from './TechPhysicsPlayground'
 import { StackedProjectsShowcase } from './StackedProjectsShowcase'
 
@@ -39,51 +40,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
           />
         </div>
 
-        {/* Feature Grid / Key Capabilities */}
-        <div id="skills-section" className="space-y-8 scroll-mt-24">
-          <span className="text-[11px] font-technical tracking-[0.35em] uppercase text-neutral-400 block text-center mx-auto">
-            03 // CAPABILITIES
-          </span>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                num: '01',
-                title: 'Interactive Experiences',
-                desc: 'Frame-by-frame canvas sequences, scroll-driven storytelling, and immersive motion systems engineered for fluid, cinematic interactions.',
-              },
-              {
-                num: '02',
-                title: 'Creative Engineering',
-                desc: 'Modern web applications built with scalable architecture, clean TypeScript, and performance-first development practices.',
-              },
-              {
-                num: '03',
-                title: 'Premium Digital Design',
-                desc: 'Minimal interfaces inspired by editorial design, crafted with attention to typography, composition, and user experience.',
-              },
-              {
-                num: '04',
-                title: 'Performance & Motion',
-                desc: 'Smooth scrolling, GPU-accelerated animations, and optimized rendering designed to maintain a responsive, high-quality experience.',
-              },
-            ].map((card) => (
-              <div
-                key={card.num}
-                className="group p-8 rounded-2xl bg-neutral-950/60 border border-neutral-800/60 hover:border-neutral-700 transition-all duration-500 hover:-translate-y-1 shadow-lg"
-              >
-                <span className="text-[11px] font-technical tracking-[0.3em] uppercase text-neutral-500 block mb-8">
-                  {card.num}
-                </span>
-                <h3 className="font-thunder text-2xl sm:text-3xl text-white mb-3 tracking-tighter uppercase font-normal group-hover:text-neutral-200 transition-colors">
-                  {card.title}
-                </h3>
-                <p className="text-xs font-technical text-neutral-400 leading-relaxed tracking-wider">
-                  {card.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Premium Infinite Horizontal Marquee Capabilities Section */}
+        <CapabilitiesMarquee />
 
         {/* Technologies Section */}
         <div id="tech-section" className="space-y-12 scroll-mt-24">
