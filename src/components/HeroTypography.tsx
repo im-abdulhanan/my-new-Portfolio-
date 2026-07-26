@@ -126,7 +126,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({
   }, [])
 
   // 2. Left Side Multilingual "ABDUL HANAN" Name Rotation Timer (Every 3s)
-  const [nameIndex, setNameIndex] = useState(0)
+  const [, setNameIndex] = useState(0)
   const [displayName, setDisplayName] = useState(NAME_TRANSLATIONS[0].name)
   const nameIntervalRef = useRef<number | null>(null)
 
