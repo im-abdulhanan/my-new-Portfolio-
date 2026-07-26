@@ -82,7 +82,7 @@ export const EditorialWordReveal: React.FC<EditorialWordRevealProps> = ({ text, 
             wordsRef.current[idx] = el
           }}
           className="inline-block transition-colors duration-500 ease-out"
-          style={{ color: '#7A7A7A', marginRight: '0.25em' }}
+          style={{ color: '#7A7A7A', marginRight: '0.35em', letterSpacing: '1px' }}
         >
           {word}
         </span>
