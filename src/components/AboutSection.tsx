@@ -214,9 +214,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
             LET’S BUILD SOMETHING <br />
             <span className="text-[#990000]">UNFORGETTABLE.</span>
           </h2>
-          <div className="pt-4">
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => onOpenContactModal ? onOpenContactModal() : (window.location.href = 'mailto:contact@antigravity.dev')}
+              onClick={() => onOpenContactModal ? onOpenContactModal() : (window.location.href = 'mailto:imhanan.mail@gmail.com')}
               className="inline-flex items-center space-x-3 px-8 py-4 rounded-full bg-white text-black font-thunder uppercase text-xl sm:text-2xl tracking-wider font-normal hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg"
             >
               <span>Get in Touch</span>
@@ -224,6 +224,16 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </button>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 text-xs font-technical uppercase tracking-widest text-neutral-400">
+            <a href="mailto:imhanan.mail@gmail.com" className="hover:text-white transition-colors">
+              imhanan.mail@gmail.com
+            </a>
+            <span className="text-neutral-700 hidden sm:inline">•</span>
+            <a href="tel:+923180522085" className="hover:text-white transition-colors">
+              +92 318 0522085
+            </a>
           </div>
         </div>
       </div>

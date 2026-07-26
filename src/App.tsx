@@ -37,12 +37,13 @@ export function App() {
 
       {/* Minimal Footer */}
       <footer className="w-full bg-[#030303] border-t border-neutral-900 py-8 px-6 sm:px-12 flex flex-col sm:flex-row items-center justify-between text-[11px] font-technical uppercase tracking-widest text-neutral-500 gap-4">
-        <div>© 2026 ANTIGRAVITY. ALL RIGHTS RESERVED.</div>
-        <div className="flex space-x-6">
-          <a href="#" className="hover:text-white transition-colors">TWITTER / X</a>
-          <a href="#" className="hover:text-white transition-colors">GITHUB</a>
-          <a href="#" className="hover:text-white transition-colors">LINKEDIN</a>
-          <a href="#" className="hover:text-white transition-colors">AWWWARDS</a>
+        <div>© 2026 ABDUL HANAN. ALL RIGHTS RESERVED.</div>
+        <div className="flex flex-wrap items-center justify-center gap-6">
+          <a href="https://x.com/abhanan_dev" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">TWITTER / X</a>
+          <a href="https://github.com/im-abdulhanan" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GITHUB</a>
+          <a href="https://www.linkedin.com/in/ihanan" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LINKEDIN</a>
+          <a href="mailto:imhanan.mail@gmail.com" className="hover:text-white transition-colors">imhanan.mail@gmail.com</a>
+          <a href="tel:+923180522085" className="hover:text-white transition-colors">+92 318 0522085</a>
         </div>
       </footer>
     </div>
