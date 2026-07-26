@@ -4,6 +4,7 @@ import { getLenisInstance } from '../hooks/useLenisScroll'
 
 interface NavbarProps {
   scrollProgress: number
+  onOpenContactModal?: () => void
 }
 
 const NAV_ITEMS = [
@@ -14,7 +15,7 @@ const NAV_ITEMS = [
   { label: 'Works', id: 'works-section' },
 ]
 
-export const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
+export const Navbar: React.FC<NavbarProps> = ({ scrollProgress, onOpenContactModal }) => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const [activeTab, setActiveTab] = useState('Overview')
@@ -135,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrollProgress }) => {
           {/* Desktop Action CTA Button */}
           <div className="hidden sm:block pl-2 sm:pl-4">
             <button
-              onClick={() => scrollToSection('contact-section', 'Contact')}
+              onClick={() => onOpenContactModal ? onOpenContactModal() : scrollToSection('contact-section', 'Contact')}
               className="inline-flex items-center space-x-1.5 text-xs font-technical uppercase tracking-wider text-black bg-white hover:bg-neutral-200 px-4 py-1.5 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 font-medium shadow-sm"
             >
               <span>Initiate</span>

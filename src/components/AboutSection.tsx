@@ -2,7 +2,11 @@ import React from 'react'
 import { EditorialWordReveal } from './EditorialWordReveal'
 import { TechPhysicsPlayground } from './TechPhysicsPlayground'
 
-export const AboutSection: React.FC = () => {
+interface AboutSectionProps {
+  onOpenContactModal?: () => void
+}
+
+export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }) => {
   const bioText =
     '“I design and engineer premium digital experiences that combine cinematic motion, modern web technologies, and intelligent systems. My work focuses on building fast, scalable, and immersive products where every interaction feels intentional and every detail serves a purpose. From Full Stack development to AI-powered applications and secure digital solutions, I strive to create experiences that are elegant, performant, and built for the future.”'
 
@@ -211,15 +215,15 @@ export const AboutSection: React.FC = () => {
             <span className="text-[#990000]">UNFORGETTABLE.</span>
           </h2>
           <div className="pt-4">
-            <a
-              href="mailto:contact@antigravity.dev"
-              className="inline-flex items-center space-x-3 px-8 py-4 rounded-full bg-white text-black font-thunder uppercase text-xl sm:text-2xl tracking-wider font-normal hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105"
+            <button
+              onClick={() => onOpenContactModal ? onOpenContactModal() : (window.location.href = 'mailto:contact@antigravity.dev')}
+              className="inline-flex items-center space-x-3 px-8 py-4 rounded-full bg-white text-black font-thunder uppercase text-xl sm:text-2xl tracking-wider font-normal hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg"
             >
               <span>Get in Touch</span>
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </a>
+            </button>
           </div>
         </div>
       </div>

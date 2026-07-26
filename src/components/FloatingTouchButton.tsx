@@ -5,7 +5,11 @@ import { getLenisInstance } from '../hooks/useLenisScroll'
 const TARGET_TEXT = 'GET IN TOUCH'
 const GLYPHS = '#%$@&*!?/\\X01'
 
-export const FloatingTouchButton: React.FC = () => {
+interface FloatingTouchButtonProps {
+  onOpenContactModal?: () => void
+}
+
+export const FloatingTouchButton: React.FC<FloatingTouchButtonProps> = ({ onOpenContactModal }) => {
   const [displayText, setDisplayText] = useState(TARGET_TEXT)
   const [isHidden, setIsHidden] = useState(false)
   const intervalRef = useRef<number | null>(null)
@@ -61,12 +65,16 @@ export const FloatingTouchButton: React.FC = () => {
   }, [])
 
   const handleClick = () => {
-    const lenis = getLenisInstance()
-    const target = document.getElementById('contact-section')
-    if (lenis && target) {
-      lenis.scrollTo(target, { duration: 1.5, offset: -20 })
-    } else if (target) {
-      target.scrollIntoView({ behavior: 'smooth' })
+    if (onOpenContactModal) {
+      onOpenContactModal()
+    } else {
+      const lenis = getLenisInstance()
+      const target = document.getElementById('contact-section')
+      if (lenis && target) {
+        lenis.scrollTo(target, { duration: 1.5, offset: -20 })
+      } else if (target) {
+        target.scrollIntoView({ behavior: 'smooth' })
+      }
     }
   }
 
