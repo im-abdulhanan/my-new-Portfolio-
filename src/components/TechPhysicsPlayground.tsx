@@ -203,8 +203,11 @@ export const TechPhysicsPlayground: React.FC = () => {
         ctx.shadowBlur = 14
         ctx.shadowOffsetY = 6
 
-        const drawW = logoData.width * 1.15
-        const drawH = logoData.height * 1.15
+        const isMobile = bounds.width < 640
+        const scaleFactor = isMobile ? 0.65 : 1.0
+
+        const drawW = logoData.width * 1.15 * scaleFactor
+        const drawH = logoData.height * 1.15 * scaleFactor
 
         if (img && img.complete) {
           ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH)
@@ -267,7 +270,9 @@ export const TechPhysicsPlayground: React.FC = () => {
           const spawnX = zoneCenterX + (Math.random() - 0.5) * (zoneWidth * 0.35)
           const spawnY = -60 - Math.random() * 40
 
-          const radius = (Math.max(logo.width, logo.height) * 1.1) / 2
+          const isMobile = bounds.width < 640
+          const scaleFactor = isMobile ? 0.65 : 1.0
+          const radius = (Math.max(logo.width, logo.height) * 1.1 * scaleFactor) / 2
 
           const body = Bodies.circle(spawnX, spawnY, radius, {
             friction: 0.45,         // High friction for stable resting state on shelf
@@ -354,7 +359,7 @@ export const TechPhysicsPlayground: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[380px] sm:h-[460px] bg-transparent rounded-3xl border border-neutral-800/30 overflow-hidden shadow-xl mt-4 sm:mt-6"
+      className="relative w-full h-[320px] sm:h-[460px] bg-transparent rounded-3xl border border-neutral-800/30 overflow-hidden shadow-xl mt-4 sm:mt-6"
       style={{ cursor: cursorStyle }}
     >
       {/* Subtle Ambient Vignette Overlay */}
