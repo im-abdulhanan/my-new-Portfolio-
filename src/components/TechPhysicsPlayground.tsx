@@ -29,10 +29,10 @@ const TECH_LOGOS: LogoItem[] = [
   { id: 'win', name: 'Windows', src: '/sequences/Teach Stack/win.png', width: 56, height: 56 },
   { id: 'microsoft', name: 'Microsoft', src: '/sequences/Teach Stack/microsoft.png', width: 56, height: 56 },
   { id: 'npm', name: 'npm', src: '/sequences/Teach Stack/npm.png', width: 64, height: 64 },
-  { id: 'frame2', name: 'Frame 2', src: '/sequences/Teach Stack/Frame 2.png', width: 60, height: 60 },
-  { id: 'frame5', name: 'Frame 5', src: '/sequences/Teach Stack/Frame 5.png', width: 60, height: 60 },
-  { id: 'frame21', name: 'Frame 21', src: '/sequences/Teach Stack/Frame 21.png', width: 60, height: 60 },
-  { id: 'frame24', name: 'Frame 24', src: '/sequences/Teach Stack/Frame 24.png', width: 60, height: 60 },
+  { id: 'claude', name: 'Claude', src: '/sequences/Teach Stack/claude.png', width: 60, height: 60 },
+  { id: 'anthropic', name: 'Anthropic', src: '/sequences/Teach Stack/anthoripic.png', width: 60, height: 60 },
+  { id: 'bootstrap', name: 'Bootstrap', src: '/sequences/Teach Stack/bootstrap.png', width: 60, height: 60 },
+  { id: 'antigravity', name: 'Antigravity', src: '/sequences/Teach Stack/antigravity.png', width: 60, height: 60 },
   { id: 'vector', name: 'Vector', src: '/sequences/Teach Stack/Vector.png', width: 60, height: 60 },
 ]
 
@@ -57,10 +57,10 @@ export const TechPhysicsPlayground: React.FC = () => {
     // Matter.js Modules
     const { Engine, World, Bodies, Body, Mouse, MouseConstraint, Composite, Events } = Matter
 
-    // Create Matter Engine
+    // Create Matter Engine with sleeping enabled
     const engine = Engine.create({
       enableSleeping: true,
-      gravity: { x: 0, y: 0.95, scale: 0.001 },
+      gravity: { x: 0, y: 0.9, scale: 0.001 }, // Realistic low gravity
     })
 
     const world = engine.world
@@ -74,7 +74,7 @@ export const TechPhysicsPlayground: React.FC = () => {
       const rect = container.getBoundingClientRect()
       return {
         width: Math.floor(rect.width),
-        height: Math.floor(container.clientHeight || 600),
+        height: Math.floor(container.clientHeight || 460),
       }
     }
 
@@ -88,25 +88,29 @@ export const TechPhysicsPlayground: React.FC = () => {
 
     const ctx = canvas.getContext('2d')
 
-    // Create Static Boundaries (Floor, Left Wall, Right Wall)
-    const wallOptions = { isStatic: true, friction: 0.4, frictionStatic: 0.5, restitution: 0.2 }
+    // 1. Calculate Horizontal Spawn Zones (Shelf Distribution)
+    const numZones = Math.max(6, Math.min(8, Math.floor(bounds.width / 115)))
+    const zoneWidth = bounds.width / numZones
+
+    // 2. Create Static Boundaries & Invisible Separators
+    const wallOptions = { isStatic: true, friction: 0.8, frictionStatic: 0.95, restitution: 0.1 }
     const wallThickness = 100
 
-    let ground = Bodies.rectangle(
+    const ground = Bodies.rectangle(
       bounds.width / 2,
       bounds.height + wallThickness / 2,
       bounds.width * 2,
       wallThickness,
       wallOptions
     )
-    let leftWall = Bodies.rectangle(
+    const leftWall = Bodies.rectangle(
       -wallThickness / 2,
       bounds.height / 2,
       wallThickness,
       bounds.height * 2,
       wallOptions
     )
-    let rightWall = Bodies.rectangle(
+    const rightWall = Bodies.rectangle(
       bounds.width + wallThickness / 2,
       bounds.height / 2,
       wallThickness,
@@ -114,12 +118,30 @@ export const TechPhysicsPlayground: React.FC = () => {
       wallOptions
     )
 
-    Composite.add(world, [ground, leftWall, rightWall])
+    // Invisible Vertical Zone Separator Barriers (discourages cross-zone migration)
+    const separators: Matter.Body[] = []
+    const barrierHeight = bounds.height * 0.45
+    for (let z = 1; z < numZones; z++) {
+      const sepX = z * zoneWidth
+      const separator = Bodies.rectangle(
+        sepX,
+        bounds.height - barrierHeight / 2,
+        8, // thin invisible separator
+        barrierHeight,
+        {
+          isStatic: true,
+          friction: 0.2,
+          restitution: 0.1,
+          render: { visible: false },
+        }
+      )
+      separators.push(separator)
+    }
+
+    Composite.add(world, [ground, leftWall, rightWall, ...separators])
 
     // Create Mouse & MouseConstraint
     const mouse = Mouse.create(canvas)
-
-    // Scale mouse coordinates for DPR
     mouse.pixelRatio = dpr
 
     const mouseConstraint = MouseConstraint.create(engine, {
@@ -162,7 +184,7 @@ export const TechPhysicsPlayground: React.FC = () => {
       ctx.save()
       ctx.scale(dpr, dpr)
 
-      // Draw all physics bodies
+      // Draw all physics bodies (Static separators are ignored so they remain 100% invisible)
       const bodies = Composite.allBodies(world)
       bodies.forEach((body) => {
         if (body.isStatic) return
@@ -187,7 +209,6 @@ export const TechPhysicsPlayground: React.FC = () => {
         if (img && img.complete) {
           ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH)
         } else {
-          // Fallback circle if image is still loading
           ctx.fillStyle = '#171717'
           ctx.beginPath()
           ctx.arc(0, 0, drawW / 2, 0, Math.PI * 2)
@@ -204,50 +225,70 @@ export const TechPhysicsPlayground: React.FC = () => {
       }
     }
 
-    // Engine Runner Step
+    // Engine Runner Step + Zone Horizontal Steering
     const runPhysicsStep = () => {
       if (isVisible) {
+        // Apply gentle horizontal steering force toward assigned zone center during descent
+        const allBodies = Composite.allBodies(world)
+        allBodies.forEach((b) => {
+          if (b.isStatic || b.isSleeping) return
+          const assignedX = (b as any).assignedZoneCenterX as number | undefined
+          if (assignedX !== undefined && b.position.y < bounds.height * 0.7) {
+            const dx = assignedX - b.position.x
+            Body.applyForce(b, b.position, { x: dx * 0.00003, y: 0 })
+          }
+        })
+
         Engine.update(engine, 1000 / 60)
         runnerId = window.setTimeout(runPhysicsStep, 1000 / 60)
       }
     }
 
-    // Staggered Spawning of Logos on Viewport Entrance
+    // Zone-Assigned Staggered Spawning of Logos
     let hasSpawned = false
     const spawnLogos = () => {
       if (hasSpawned) return
       hasSpawned = true
 
+      // Track logos per zone to limit max 2-3 logos per zone
+      const zoneCounts = new Array(numZones).fill(0)
+
       TECH_LOGOS.forEach((logo, index) => {
         setTimeout(() => {
-          // Spawn each logo at a randomized X position across the full container width
-          const padding = 65
-          const minX = padding
-          const maxX = bounds.width - padding
-          const spawnX = minX + Math.random() * (maxX - minX)
-          const spawnY = -60 - Math.random() * 50
+          // Assign to zone with least items or round-robin
+          let assignedZone = index % numZones
+          if (zoneCounts[assignedZone] >= 3) {
+            assignedZone = zoneCounts.indexOf(Math.min(...zoneCounts))
+          }
+          zoneCounts[assignedZone]++
+
+          const zoneCenterX = (assignedZone + 0.5) * zoneWidth
+          // Slight jitter around assigned zone center
+          const spawnX = zoneCenterX + (Math.random() - 0.5) * (zoneWidth * 0.35)
+          const spawnY = -60 - Math.random() * 40
 
           const radius = (Math.max(logo.width, logo.height) * 1.1) / 2
 
           const body = Bodies.circle(spawnX, spawnY, radius, {
-            friction: 0.3,          // Moderate friction prevents tall towers and encourages spreading
-            frictionStatic: 0.45,   // Allows balanced resting piles across the floor
+            friction: 0.45,         // High friction for stable resting state on shelf
+            frictionStatic: 0.9,    // Prevents settled bodies from being pushed across the floor
             frictionAir: 0.02,      // Moderate air friction for smooth low-gravity descent
-            restitution: 0.2,       // Low bounce for clean, realistic settling
-            density: 0.0025,
+            restitution: 0.15,      // Low bounce for clean, shelf-like settling
+            density: 0.003,
           })
 
           ;(body as any).logoData = logo
+          ;(body as any).assignedZoneCenterX = zoneCenterX
 
-          // Apply small random horizontal velocity + slight random initial rotation
+          // Small initial velocity & slight rotation
           Body.setVelocity(body, {
-            x: (Math.random() - 0.5) * 3.2,
-            y: Math.random() * 1.5 + 1.2,
+            x: (Math.random() - 0.5) * 1.2,
+            y: Math.random() * 1.5 + 1.0,
           })
-          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.1)
+          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.06)
 
           Composite.add(world, body)
-        }, index * 100) // Staggered drop by 100ms
+        }, index * 95) // 95ms staggered drop
       })
     }
 
