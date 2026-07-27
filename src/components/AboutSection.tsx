@@ -102,7 +102,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => onOpenContactModal ? onOpenContactModal() : (window.location.href = 'mailto:imhanan.mail@gmail.com')}
-              className="inline-flex items-center space-x-3 px-8 py-4 rounded-full bg-white text-black font-thunder uppercase text-xl sm:text-2xl tracking-wider font-normal hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg"
+              className="inline-flex items-center space-x-3 px-8 py-4 rounded-full bg-white text-black font-technical uppercase text-xs sm:text-sm tracking-widest font-semibold hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg"
             >
               <span>Get in Touch</span>
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

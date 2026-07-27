@@ -173,7 +173,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({
     return words.map((word, idx) => {
       const isRed = redWordIndices.includes(idx)
       return (
-        <span key={idx} className={isRed ? 'text-[#800000]' : 'text-[#777875] sm:text-neutral-800'}>
+        <span key={idx} className={isRed ? 'text-[#800000]' : 'text-[#777875] lg:text-neutral-800'}>
           {word}{' '}
         </span>
       )
@@ -181,9 +181,9 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({
   }
 
   return (
-    <div className="absolute inset-0 z-20 pointer-events-none flex flex-col sm:flex-row items-center justify-end sm:justify-between pb-28 sm:pb-0 p-6 sm:p-12 md:p-16 lg:p-20 select-none overflow-hidden space-y-4 sm:space-y-0">
+    <div className="absolute inset-0 z-20 pointer-events-none flex flex-col lg:flex-row items-center justify-end lg:justify-between pb-28 lg:pb-0 p-6 lg:p-20 select-none overflow-hidden space-y-4 lg:space-y-0">
       {/* LEFT SIDE CONTAINER (Hosts Stage 1 Intro & Stage 2 Statement) */}
-      <div className="relative max-w-[280px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[460px] text-center sm:text-left mx-auto sm:mx-0">
+      <div className="relative max-w-[280px] sm:max-w-[340px] lg:max-w-[460px] text-center lg:text-left mx-auto lg:mx-0">
         {/* Stage 1: Frame 0001 -> 0096 Multilingual Intro Text */}
         <div
           className="transition-all duration-300 ease-out"
@@ -193,7 +193,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({
             display: currentFrame > 105 ? 'none' : 'block',
           }}
         >
-          <h1 className="font-thunder text-3xl sm:text-6xl md:text-7xl lg:text-8xl text-[#777875] sm:text-neutral-900 tracking-tighter uppercase leading-[0.85] drop-shadow-sm">
+          <h1 className="font-thunder text-3xl sm:text-4xl lg:text-8xl text-[#777875] lg:text-neutral-900 tracking-tighter uppercase leading-[0.85] drop-shadow-sm">
             YO! I'M<br />
             <span className="text-[#990000]">{displayName}</span>
           </h1>
@@ -211,26 +211,26 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({
             width: '100%',
           }}
         >
-          <h1 className="font-thunder text-3xl sm:text-6xl md:text-7xl lg:text-8xl text-[#777875] sm:text-neutral-900 tracking-tighter uppercase leading-[0.85] drop-shadow-sm">
+          <h1 className="font-thunder text-3xl sm:text-4xl lg:text-8xl text-[#777875] lg:text-neutral-900 tracking-tighter uppercase leading-[0.85] drop-shadow-sm">
             IN THE ERA OF <span className="text-[#800000]">AI</span>,<br />
-            <span className="text-[#777875] sm:text-neutral-800">WE </span>
+            <span className="text-[#777875] lg:text-neutral-800">WE </span>
             <span className="text-[#990000]">BUILD</span>
-            <span className="text-[#777875] sm:text-neutral-800"> DIFFERENT.</span>
+            <span className="text-[#777875] lg:text-neutral-800"> DIFFERENT.</span>
           </h1>
         </div>
       </div>
 
       {/* RIGHT SIDE DYNAMIC SCRAMBLE TYPOGRAPHY */}
       <div
-        className="max-w-[280px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[460px] text-center sm:text-right mx-auto sm:ml-auto sm:mr-0 transition-opacity duration-500 ease-out space-y-1 sm:space-y-2"
+        className="max-w-[280px] sm:max-w-[340px] lg:max-w-[460px] text-center lg:text-right mx-auto lg:ml-auto lg:mr-0 transition-opacity duration-500 ease-out space-y-1 lg:space-y-2"
         style={{
           opacity: rightOpacity,
         }}
       >
-        <div className="text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.3em] text-[#777875] sm:text-neutral-600 block">
+        <div className="text-[9px] sm:text-[10px] font-technical uppercase tracking-[0.3em] text-[#777875] lg:text-neutral-600 block">
           SPECIALIZATION // 0{phraseIndex + 1}
         </div>
-        <h2 className="font-thunder text-3xl sm:text-6xl md:text-7xl lg:text-8xl text-[#777875] sm:text-neutral-900 tracking-tighter uppercase leading-[0.85] drop-shadow-sm">
+        <h2 className="font-thunder text-3xl sm:text-4xl lg:text-8xl text-[#777875] lg:text-neutral-900 tracking-tighter uppercase leading-[0.85] drop-shadow-sm">
           {renderPhraseWords(displayText)}
         </h2>
       </div>

@@ -43,11 +43,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-2xl transition-all duration-500 animate-fadeIn">
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-neutral-950 border border-neutral-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8 my-auto overflow-hidden">
+      <div className="relative w-full max-w-2xl max-h-[90vh] bg-neutral-950 border border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 my-auto overflow-y-auto no-scrollbar">
         {/* Close Button */}
         <button
           onClick={handleResetAndClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-neutral-900/80 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all duration-300"
+          className="absolute top-6 right-6 p-2 rounded-full bg-neutral-900/80 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all duration-300 z-30"
           aria-label="Close dialog"
         >
           <HiX className="w-5 h-5" />
@@ -87,7 +87,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           /* Form Content */
           <>
             {/* Header & Subtitle */}
-            <div className="space-y-2 text-left border-b border-neutral-900 pb-6">
+            <div className="space-y-2 text-left border-b border-neutral-900 pb-4 pr-10">
               <span className="text-[10px] font-technical tracking-[0.35em] uppercase text-[#990000] font-semibold block">
                 GET IN TOUCH
               </span>
@@ -100,10 +100,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {/* Row 1: Full Name & Email Address */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="space-y-1.5 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Full Name <span className="text-[#990000]">*</span>
                   </label>
@@ -117,7 +117,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   />
                 </div>
 
-                <div className="space-y-2 text-left">
+                <div className="space-y-1.5 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Email Address <span className="text-[#990000]">*</span>
                   </label>
@@ -133,8 +133,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
 
               {/* Row 2: Company & Project Type */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="space-y-1.5 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Company <span className="text-neutral-500">(Optional)</span>
                   </label>
@@ -147,7 +147,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   />
                 </div>
 
-                <div className="space-y-2 text-left">
+                <div className="space-y-1.5 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Project Type <span className="text-[#990000]">*</span>
                   </label>
@@ -171,8 +171,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
 
               {/* Row 3: Estimated Budget & Project Timeline */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div className="space-y-1.5 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Estimated Budget <span className="text-neutral-500">(Optional)</span>
                   </label>
@@ -189,7 +189,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   </select>
                 </div>
 
-                <div className="space-y-2 text-left">
+                <div className="space-y-1.5 text-left">
                   <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                     Project Timeline <span className="text-neutral-500">(Optional)</span>
                   </label>
@@ -208,13 +208,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
 
               {/* Project Details Textarea */}
-              <div className="space-y-2 text-left">
+              <div className="space-y-1.5 text-left">
                 <label className="text-[11px] font-technical uppercase tracking-wider text-neutral-300 block">
                   Project Details <span className="text-[#990000]">*</span>
                 </label>
                 <textarea
                   required
-                  rows={4}
+                  rows={3}
                   value={formData.details}
                   onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                   placeholder="Tell me about your project, goals, timeline, and anything else you'd like me to know..."
@@ -222,11 +222,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 />
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-between pt-2 gap-4 border-t border-neutral-900">
+              {/* Sticky Action Buttons */}
+              <div className="sticky bottom-0 bg-neutral-950/95 backdrop-blur-md pt-4 pb-2 z-20 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-black font-thunder uppercase text-xl tracking-wider font-normal hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 shadow-md"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-black font-technical uppercase text-xs tracking-widest font-semibold hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer"
                 >
                   Initiate Project
                 </button>
@@ -234,14 +234,14 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 <button
                   type="button"
                   onClick={handleResetAndClose}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-technical uppercase tracking-widest text-neutral-400 hover:text-white transition-colors"
+                  className="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-technical uppercase tracking-widest text-neutral-400 hover:text-white border border-neutral-800 hover:border-neutral-600 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
               </div>
 
               {/* Premium Footer Note */}
-              <p className="text-[10px] font-technical text-neutral-500 uppercase tracking-widest text-center pt-2">
+              <p className="text-[10px] font-technical text-neutral-500 uppercase tracking-widest text-center pt-1">
                 I'll personally review your inquiry and respond as soon as possible.
               </p>
             </form>
