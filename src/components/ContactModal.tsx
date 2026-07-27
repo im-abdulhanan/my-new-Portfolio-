@@ -17,13 +17,31 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     details: '',
   })
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   if (!isOpen) return null
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitted(true)
+    setIsSubmitting(true)
+
+    try {
+      const baseUrl = import.meta.env.VITE_API_URL || ''
+      await fetch(`${baseUrl}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+      setIsSubmitted(true)
+    } catch (err) {
+      console.error("Submission error:", err)
+      setIsSubmitted(true)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleResetAndClose = () => {
@@ -226,9 +244,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               <div className="sticky bottom-0 bg-neutral-950/95 backdrop-blur-md pt-4 pb-2 z-20 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-black font-technical uppercase text-xs tracking-widest font-semibold hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-black font-technical uppercase text-xs tracking-widest font-semibold hover:bg-neutral-200 transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Initiate Project
+                  {isSubmitting ? 'Sending...' : 'Initiate Project'}
                 </button>
 
                 <button
