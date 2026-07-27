@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { HiX, HiCheckCircle } from 'react-icons/hi'
 
 interface ContactModalProps {
@@ -17,8 +17,16 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     details: '',
   })
 
+  const [loadedAt, setLoadedAt] = useState<number>(() => Date.now())
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+
+  // Initialize loadedAt timestamp whenever dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setLoadedAt(Date.now())
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -26,15 +34,31 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     e.preventDefault()
     setIsSubmitting(true)
 
+    // Build payload matching exact backend schema contract
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      company: formData.company,
+      projectType: formData.projectType,
+      budget: formData.budget,
+      projectDetails: formData.details,
+      website: '',
+      loadedAt: loadedAt,
+    }
+
+    console.log("Submitting payload:", payload)
+
     try {
       const baseUrl = import.meta.env.VITE_API_URL || ''
-      await fetch(`${baseUrl}/api/contact`, {
+      const res = await fetch(`${baseUrl}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       })
+      const data = await res.json()
+      console.log("API Response:", data)
       setIsSubmitted(true)
     } catch (err) {
       console.error("Submission error:", err)
@@ -232,6 +256,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 </label>
                 <textarea
                   required
+                  minLength={10}
                   rows={3}
                   value={formData.details}
                   onChange={(e) => setFormData({ ...formData, details: e.target.value })}
