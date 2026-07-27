@@ -101,21 +101,18 @@ export const HeroCanvas: React.FC<HeroCanvasProps> = ({ onScrollProgressChange }
           }}
         />
 
-        {/* Minimal Initial Loader Screen */}
+        {/* Minimal Initial Percentage Loader Screen */}
         {!loaderState.isFirstFrameReady && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#E0E3E0] z-30 transition-opacity duration-700">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="relative w-12 h-12">
-                <div className="absolute inset-0 rounded-full border border-neutral-400"></div>
-                <div className="absolute inset-0 rounded-full border-t-2 border-neutral-900 animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center bg-[#E0E3E0] z-30 transition-opacity duration-700">
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <div className="font-thunder text-7xl sm:text-9xl md:text-[10rem] text-neutral-900 tracking-tighter font-normal leading-none select-none">
+                {loaderState.loadPercentage}%
               </div>
-              <div className="text-center space-y-1">
-                <span className="text-[11px] font-technical tracking-[0.3em] uppercase text-neutral-900 block">
-                  ANTIGRAVITY CINEMATIC
-                </span>
-                <span className="text-[10px] font-technical tracking-widest text-neutral-600 uppercase block">
-                  Initializing Sequence Buffer... {loaderState.loadPercentage}%
-                </span>
+              <div className="w-32 sm:w-48 h-1 bg-neutral-300 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[#990000] transition-all duration-300 ease-out"
+                  style={{ width: `${loaderState.loadPercentage}%` }}
+                ></div>
               </div>
             </div>
           </div>
