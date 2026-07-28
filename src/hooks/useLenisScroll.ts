@@ -11,10 +11,12 @@ export function getLenisInstance(): Lenis | null {
   return globalLenisInstance
 }
 
-export function useLenisScroll() {
+export function useLenisScroll(enabled: boolean = true) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
+    if (!enabled) return
+
     // Instantiate Lenis with custom Apple-like physical scroll inertia
     const lenis = new Lenis({
       duration: 1.6,
@@ -40,13 +42,18 @@ export function useLenisScroll() {
     gsap.ticker.add(updateGsapTicker)
     gsap.ticker.lagSmoothing(0)
 
+    // Refresh GSAP ScrollTrigger once Lenis initializes after loading completes
+    setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 100)
+
     return () => {
       gsap.ticker.remove(updateGsapTicker)
       lenis.destroy()
       lenisRef.current = null
       globalLenisInstance = null
     }
-  }, [])
+  }, [enabled])
 
   return lenisRef
 }

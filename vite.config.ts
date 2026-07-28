@@ -15,4 +15,20 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
+  build: {
+    target: 'es2020',
+    cssCodeSplit: true,
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-animation': ['gsap', 'lenis'],
+          'vendor-physics': ['matter-js'],
+          'vendor-icons': ['react-icons'],
+        },
+      },
+    },
+  },
 })

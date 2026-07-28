@@ -295,3 +295,5 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     </div>
   )
 }
+
+export default ContactModal

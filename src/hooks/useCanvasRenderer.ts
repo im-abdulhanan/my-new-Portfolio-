@@ -10,6 +10,7 @@ export function useCanvasRenderer(
   const lastRenderedFrameRef = useRef<number>(-1)
   const animFrameIdRef = useRef<number | null>(null)
   const currentFrameIndexRef = useRef<number>(1)
+  const isCanvasVisibleRef = useRef<boolean>(true)
 
   /**
    * Adaptive Cinematic Scaling Calculation Strategy:
@@ -95,7 +96,8 @@ export function useCanvasRenderer(
       const ctx = canvas.getContext('2d', { alpha: false })
       if (!ctx) return
 
-      // Skip duplicate renders unless forced by resize
+      // Skip duplicate renders or hidden tab rendering
+      if (!isCanvasVisibleRef.current && !forceRedraw) return
       if (!forceRedraw && Math.floor(frameIndex) === lastRenderedFrameRef.current) {
         return
       }
@@ -198,6 +200,33 @@ export function useCanvasRenderer(
     const canvas = canvasRef.current
     if (!canvas) return
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        isCanvasVisibleRef.current = false
+      } else {
+        isCanvasVisibleRef.current = true
+        if (currentFrameIndexRef.current > 0) {
+          renderFrame(currentFrameIndexRef.current, true)
+        }
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    let intersectionObserver: IntersectionObserver | null = null
+    if (canvas) {
+      intersectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          isCanvasVisibleRef.current = entry.isIntersecting
+          if (entry.isIntersecting && currentFrameIndexRef.current > 0) {
+            renderFrame(currentFrameIndexRef.current, true)
+          }
+        },
+        { threshold: 0.05 }
+      )
+      intersectionObserver.observe(canvas)
+    }
+
     const observer = new ResizeObserver(() => {
       if (animFrameIdRef.current) {
         cancelAnimationFrame(animFrameIdRef.current)
@@ -210,6 +239,8 @@ export function useCanvasRenderer(
     observer.observe(canvas)
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      if (intersectionObserver) intersectionObserver.disconnect()
       observer.disconnect()
       if (animFrameIdRef.current) {
         cancelAnimationFrame(animFrameIdRef.current)

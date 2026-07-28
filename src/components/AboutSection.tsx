@@ -130,3 +130,5 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenContactModal }
     </section>
   )
 }
+
+export default AboutSection

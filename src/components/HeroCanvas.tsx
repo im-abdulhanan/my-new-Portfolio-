@@ -95,28 +95,8 @@ export const HeroCanvas: React.FC<HeroCanvasProps> = ({ onScrollProgressChange }
         {/* HTML5 Canvas Element */}
         <canvas
           ref={canvasRef}
-          className="w-full h-full object-center pointer-events-none transition-opacity duration-1000"
-          style={{
-            opacity: loaderState.isFirstFrameReady ? 1 : 0,
-          }}
+          className="w-full h-full object-center pointer-events-none"
         />
-
-        {/* Minimal Initial Percentage Loader Screen */}
-        {!loaderState.isFirstFrameReady && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[#E0E3E0] z-30 transition-opacity duration-700">
-            <div className="flex flex-col items-center justify-center space-y-3">
-              <div className="font-thunder text-7xl sm:text-9xl md:text-[10rem] text-neutral-900 tracking-tighter font-normal leading-none select-none">
-                {loaderState.loadPercentage}%
-              </div>
-              <div className="w-32 sm:w-48 h-1 bg-neutral-300 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-[#990000] transition-all duration-300 ease-out"
-                  style={{ width: `${loaderState.loadPercentage}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Editorial Typography Overlays */}
         <HeroTypography
