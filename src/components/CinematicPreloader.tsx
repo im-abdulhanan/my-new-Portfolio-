@@ -9,77 +9,73 @@ interface CinematicPreloaderProps {
 export const CinematicPreloader: React.FC<CinematicPreloaderProps> = ({ onComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [displayPercent, setDisplayPercent] = useState<number>(0)
-  const targetPercentRef = useRef<number>(0)
-  const currentValRef = useRef<{ value: number }>({ value: 0 })
-  const tweenRef = useRef<gsap.core.Tween | null>(null)
+  const realProgressRef = useRef<number>(0)
   const isFinishedRef = useRef<boolean>(false)
 
   useEffect(() => {
-    // Lock scroll during preloading
     document.body.style.overflow = 'hidden'
 
-    // 1. Initialize Master Asset Loader
+    const startTime = Date.now()
+    const TARGET_DURATION_MS = 7500 // 7.5s cinematic rendering duration (6-10s window)
+
+    // 1. Initialize Master Asset Loader for all 240 frames
     startMasterAssetLoader({
       onProgress: (progress) => {
-        targetPercentRef.current = progress
-
-        // Smoothly animate display percentage count toward real progress using GSAP tweening
-        if (tweenRef.current) tweenRef.current.kill()
-
-        tweenRef.current = gsap.to(currentValRef.current, {
-          value: progress,
-          duration: 0.35,
-          ease: 'power1.out',
-          onUpdate: () => {
-            setDisplayPercent(Math.floor(currentValRef.current.value))
-          },
-        })
+        realProgressRef.current = progress
       },
       onComplete: () => {
-        // Guarantee 100% progress animation completes smoothly
-        if (isFinishedRef.current) return
-        isFinishedRef.current = true
-
-        gsap.to(currentValRef.current, {
-          value: 100,
-          duration: 0.4,
-          ease: 'power2.out',
-          onUpdate: () => {
-            setDisplayPercent(Math.floor(currentValRef.current.value))
-          },
-          onComplete: () => {
-            // 2. Wait 300ms when 100% is reached
-            setTimeout(() => {
-              // 3. Cinematic Outro Animation (Opacity 1->0, Blur 0->20px, Scale 1->1.03)
-              if (containerRef.current) {
-                gsap.to(containerRef.current, {
-                  opacity: 0,
-                  filter: 'blur(20px)',
-                  scale: 1.03,
-                  duration: 0.8,
-                  ease: 'power4.inOut',
-                  onComplete: () => {
-                    document.body.style.overflow = ''
-                    onComplete()
-                  },
-                })
-              } else {
-                document.body.style.overflow = ''
-                onComplete()
-              }
-            }, 300)
-          },
-        })
+        realProgressRef.current = 100
       },
     })
 
+    // 2. Smooth 60 FPS animation loop that ticks numbers 0% -> 100% across ~7.5 seconds
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTime
+      const timePercent = Math.min(100, Math.floor((elapsed / TARGET_DURATION_MS) * 100))
+
+      // Display percentage is balanced between time progress and actual frame progress
+      const targetVal = Math.min(100, Math.max(timePercent, realProgressRef.current))
+
+      setDisplayPercent((prev) => {
+        if (prev >= 100) return 100
+        const next = Math.min(100, prev + 1)
+        return next > targetVal ? prev : next
+      })
+
+      // When 100% is reached and time target elapsed
+      if (elapsed >= TARGET_DURATION_MS && realProgressRef.current >= 95 && !isFinishedRef.current) {
+        isFinishedRef.current = true
+        clearInterval(interval)
+        setDisplayPercent(100)
+
+        // Wait 300ms, then run GSAP Outro (opacity: 0, blur: 20px, scale: 1.03)
+        setTimeout(() => {
+          if (containerRef.current) {
+            gsap.to(containerRef.current, {
+              opacity: 0,
+              filter: 'blur(20px)',
+              scale: 1.03,
+              duration: 0.8,
+              ease: 'power4.inOut',
+              onComplete: () => {
+                document.body.style.overflow = ''
+                onComplete()
+              },
+            })
+          } else {
+            document.body.style.overflow = ''
+            onComplete()
+          }
+        }, 300)
+      }
+    }, 45) // ~22 updates per second for smooth number ticking (42% -> 43% -> 44%)
+
     return () => {
+      clearInterval(interval)
       document.body.style.overflow = ''
-      if (tweenRef.current) tweenRef.current.kill()
     }
   }, [onComplete])
 
-  // Format number as 3-digit string (e.g. 004%, 042%, 100%)
   const formattedPercent = String(displayPercent).padStart(3, '0')
 
   return (

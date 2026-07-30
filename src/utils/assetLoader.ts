@@ -43,34 +43,31 @@ export interface AssetLoaderOptions {
 }
 
 export function startMasterAssetLoader(options: AssetLoaderOptions) {
-  const CRITICAL_FRAME_COUNT = 30
   const totalFrames = SEQUENCE_CONFIG.totalFrames
   const totalStatic = STATIC_ASSETS.length
-  
-  // Total critical assets required for preloader completion
-  const totalCriticalAssets = CRITICAL_FRAME_COUNT + totalStatic
-  let criticalLoadedCount = 0
-  let isPreloaderComplete = false
+  const totalAssets = totalFrames + totalStatic
+
+  let loadedCount = 0
+  let isComplete = false
 
   const notifyProgress = () => {
-    if (isPreloaderComplete) return
-    criticalLoadedCount++
-    const rawProgress = Math.floor((criticalLoadedCount / totalCriticalAssets) * 100)
+    if (isComplete) return
+    loadedCount++
+    const rawProgress = Math.floor((loadedCount / totalAssets) * 100)
     const progress = Math.min(100, rawProgress)
 
-    options.onProgress(progress, criticalLoadedCount, totalCriticalAssets)
+    options.onProgress(progress, loadedCount, totalAssets)
 
-    if (criticalLoadedCount >= totalCriticalAssets && !isPreloaderComplete) {
-      isPreloaderComplete = true
+    if (loadedCount >= totalAssets && !isComplete) {
+      isComplete = true
       options.onComplete()
-      // Continue loading remaining background frames (31..240)
-      loadBackgroundFrames()
     }
   }
 
   // 1. Single frame loader with memory caching and async decoding
   const loadSingleFrame = async (frameIndex: number): Promise<void> => {
     if (globalFrameCache.has(frameIndex)) {
+      notifyProgress()
       return
     }
 
@@ -106,13 +103,16 @@ export function startMasterAssetLoader(options: AssetLoaderOptions) {
         })
       }
     } catch (e) {
-      // Graceful fallback on network error
+      // Fallback
+    } finally {
+      notifyProgress()
     }
   }
 
-  // 2. Static image loader with memory caching and async decoding
+  // 2. Static image loader
   const loadStaticImage = async (url: string): Promise<void> => {
     if (globalStaticImageCache.has(url)) {
+      notifyProgress()
       return
     }
 
@@ -136,39 +136,33 @@ export function startMasterAssetLoader(options: AssetLoaderOptions) {
         img.onerror = () => resolve()
       }
     })
+    notifyProgress()
   }
 
-  // 3. Priority 1 Loading: First 30 frames + static assets + document fonts
-  const loadCriticalAssets = async () => {
-    const criticalTasks: (() => Promise<void>)[] = []
+  // 3. Load all 240 frames + static assets in managed parallel chunks
+  const loadAllAssets = async () => {
+    const tasks: (() => Promise<void>)[] = []
 
-    // Critical frames 1..30
-    for (let i = 1; i <= CRITICAL_FRAME_COUNT; i++) {
+    // Priority 1: Frame 1 and Frame 240
+    await loadSingleFrame(1)
+    await loadSingleFrame(totalFrames)
+
+    // All remaining frames (2..239)
+    for (let i = 2; i < totalFrames; i++) {
       const idx = i
-      criticalTasks.push(async () => {
-        await loadSingleFrame(idx)
-        notifyProgress()
-      })
+      tasks.push(() => loadSingleFrame(idx))
     }
 
-    // Also include boundary frame 240 in critical batch for smooth tail transition
-    criticalTasks.push(async () => {
-      await loadSingleFrame(totalFrames)
-    })
-
-    // Static images
+    // All static images
     STATIC_ASSETS.forEach((url) => {
-      criticalTasks.push(async () => {
-        await loadStaticImage(url)
-        notifyProgress()
-      })
+      tasks.push(() => loadStaticImage(url))
     })
 
-    // Run critical tasks in parallel pool of 12
-    const CONCURRENCY = 12
-    for (let i = 0; i < criticalTasks.length; i += CONCURRENCY) {
-      const batch = criticalTasks.slice(i, i + CONCURRENCY)
-      await Promise.all(batch.map((task) => task()))
+    // Parallel chunk processing with concurrency pool of 8 to pace loading smoothly over 6-10s
+    const CONCURRENCY = 8
+    for (let i = 0; i < tasks.length; i += CONCURRENCY) {
+      const batch = tasks.slice(i, i + CONCURRENCY)
+      await Promise.all(batch.map((t) => t()))
     }
 
     if (document.fonts) {
@@ -176,21 +170,5 @@ export function startMasterAssetLoader(options: AssetLoaderOptions) {
     }
   }
 
-  // 4. Background Loading: Progressive background loading for remaining frames (31..239)
-  const loadBackgroundFrames = async () => {
-    const remainingFrames: number[] = []
-    for (let i = CRITICAL_FRAME_COUNT + 1; i < totalFrames; i++) {
-      if (!globalFrameCache.has(i)) {
-        remainingFrames.push(i)
-      }
-    }
-
-    const CONCURRENCY = 6
-    while (remainingFrames.length > 0) {
-      const chunk = remainingFrames.splice(0, CONCURRENCY)
-      await Promise.all(chunk.map((idx) => loadSingleFrame(idx)))
-    }
-  }
-
-  loadCriticalAssets()
+  loadAllAssets()
 }
