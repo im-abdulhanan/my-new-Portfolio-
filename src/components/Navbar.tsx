@@ -99,45 +99,45 @@ export const Navbar: React.FC<NavbarProps> = ({ scrollProgress, onOpenContactMod
         }}
       >
         <nav
-          className={`pointer-events-auto relative flex items-center justify-between transition-all duration-500 ease-out rounded-full px-5 py-2.5 w-full sm:w-auto overflow-hidden ${
+          className={`pointer-events-auto flex items-center justify-between transition-all duration-500 ease-out glass-pill rounded-full px-5 py-2.5 w-full sm:w-auto ${
             isScrolled
-              ? 'liquid-glass-nav-scrolled scale-[0.98]'
-              : 'liquid-glass-nav'
+              ? 'bg-neutral-950/85 border-white/15 shadow-2xl shadow-black/80 backdrop-blur-xl scale-[0.98]'
+              : 'bg-neutral-950/50 border-white/10 shadow-lg backdrop-blur-md'
           }`}
         >
-          {/* Subtle Ambient Liquid Glass Reflection Sheen */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none opacity-40"></div>
-
           {/* Brand Identity */}
-          <div className="relative z-10 flex items-center space-x-2.5 pr-2 sm:pr-4">
-            <span className="w-2 h-2 rounded-full bg-[#990000] shadow-[0_0_8px_#990000] animate-pulse"></span>
+          <div className="flex items-center space-x-2.5 pr-2 sm:pr-4">
+            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
             <span className="font-technical text-xs uppercase tracking-widest text-white font-medium">
               <span className="text-[#990000] font-semibold">ABDUL</span> HANAN
             </span>
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="relative z-10 hidden sm:flex items-center space-x-1 sm:space-x-1.5 bg-black/20 p-1 rounded-full border border-white/10 backdrop-blur-md">
+          <div className="hidden sm:flex items-center space-x-1 sm:space-x-2">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.label}
                 onClick={() => scrollToSection(item.id, item.label)}
-                className={`relative px-3.5 py-1.5 rounded-full text-xs font-technical tracking-wide transition-all duration-300 ${
+                className={`relative px-3 py-1.5 rounded-full text-xs font-technical tracking-wide transition-all duration-300 ${
                   activeTab === item.label
-                    ? 'text-white font-medium liquid-glass-pill shadow-[0_2px_10px_rgba(255,255,255,0.15)]'
-                    : 'text-neutral-400 hover:text-white hover:bg-white/10'
+                    ? 'text-white font-medium bg-white/10 shadow-inner'
+                    : 'text-neutral-400 hover:text-neutral-200 hover:bg-white/5'
                 }`}
               >
                 {item.label}
+                {activeTab === item.label && (
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-3 h-[1.5px] bg-white rounded-full"></span>
+                )}
               </button>
             ))}
           </div>
 
           {/* Desktop Action CTA Button */}
-          <div className="relative z-10 hidden sm:block pl-2 sm:pl-4">
+          <div className="hidden sm:block pl-2 sm:pl-4">
             <button
               onClick={() => onOpenContactModal ? onOpenContactModal() : scrollToSection('contact-section', 'Contact')}
-              className="inline-flex items-center space-x-1.5 text-xs font-technical uppercase tracking-wider text-black bg-white hover:bg-neutral-100 px-4 py-1.5 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold shadow-[0_0_15px_rgba(255,255,255,0.3)] border border-white/40"
+              className="inline-flex items-center space-x-1.5 text-xs font-technical uppercase tracking-wider text-black bg-white hover:bg-neutral-200 px-4 py-1.5 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 font-medium shadow-sm"
             >
               <span>Initiate</span>
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({ scrollProgress, onOpenContactMod
           </div>
 
           {/* Mobile Menu Icon Toggle (Visible only on small devices) */}
-          <div className="relative z-10 sm:hidden flex items-center">
+          <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-1.5 text-white hover:text-neutral-300 focus:outline-none transition-colors"
