@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.env.*
+.git
+.gitignore
+README.md
+API_DOCUMENTATION.md
+DEPLOYMENT_GUIDE.md
+postman_collection.json

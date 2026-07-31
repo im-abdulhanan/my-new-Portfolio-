@@ -1,0 +1,52 @@
+{
+  "info": {
+    "_postman_id": "portfolio-backend-api-v1",
+    "name": "Portfolio Backend API",
+    "description": "Postman Collection for testing Abdul Hanan Portfolio Backend API endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Submit Contact Inquiry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Alex Mercer\",\n  \"email\": \"alex@company.com\",\n  \"company\": \"Acme Studio\",\n  \"projectType\": \"SaaS Dashboard\",\n  \"budget\": \"$1,500 – $5,000\",\n  \"projectDetails\": \"We need a modern, high-performance SaaS dashboard built with Next.js and Tailwind CSS.\",\n  \"website\": \"\",\n  \"loadedAt\": 1785500000000\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/contact",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "contact"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
